@@ -1,0 +1,55 @@
+{% include 'admin_headerfile.html' %}
+
+{% include 'adm_navbar.html' %}
+
+<div class="container">
+    <center><h1 class="h3 mb-0 text-gray-800"> Diseases History List </h1></center>
+    <br>
+
+    <div style="overflow-x:auto;">
+        <table id="userTable" class="table table-hover">
+            <tr>
+                        <th>Diseases</th>
+                        <th>Date Time</th>
+                        <th>Username</th>
+                        
+
+            </tr>
+            {% for n in doc_list %}
+            <tr>
+                <td>{{ n[0] }}</td>
+                <td>{{ n[1] }}</td>
+                <td>{{ n[2] }}</td>
+                <td>{{ n[3] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<!-- Add search button -->
+
+<script>
+    function searchProfiles() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("userTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2]; // Index 2 corresponds to the username column
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    // Add event listener to search button
+    document.querySelector("#searchButton").addEventListener("click", searchProfiles);
+</script>

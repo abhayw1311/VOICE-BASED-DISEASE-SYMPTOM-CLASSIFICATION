@@ -1,0 +1,92 @@
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        nav{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        nav ul{
+            list-style: none;
+            display: flex;
+            padding: 0px;
+            margin: 0px;
+        }
+        nav ul li{
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+           text-decoration: none;
+           color: white;
+           font-weight: bold;
+        }
+        header{
+            background: #ec008c;  /* fallback for old browsers */
+                background: -webkit-linear-gradient(to right, #fc6767, #ec008c);  /* Chrome 10-25, Safari 5.1-6 */
+                background: linear-gradient(to right, #fc6767, #ec008c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+            color: white;
+        }
+        .container {
+            padding: 20px;
+        }
+        .rounded-circle {
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+            }
+
+        body{
+
+        }
+
+    </style>
+    <header>
+        <nav>
+            <div class="logo">
+                <h3 style="padding-left:20px; color:black;"><b>Voice Based Disease Symptoms Classification</b> </h3>
+
+            </div>
+            <ul>
+                <li><a href="/user_dashboard" class="active">Dashboard</a></li>
+                <li><a href="/audio_to_text/">Symptoms Checker</a></li>
+                <li><a href="/user_update">Edit Profile</a></li>
+                <li><a href="/history_list" > History</a></li>
+                 <li><a href="/">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+<!--<div class="topnav" id="myTopnav">-->
+<!--  <a href="/audio_to_text" class="active">Home</a>-->
+<!--  <a href="/audio_to_text/">Symptoms Checker</a>-->
+<!--   <a href="/user_update">Change Password</a>-->
+<!--  <a href="/">Logout</a>-->
+
+<!--  <a href="javascript:void(0);" class="icon" onclick="myFunction()">-->
+<!--    <i class="fa fa-bars"></i>-->
+<!--  </a>-->
+<!--</div>-->
+
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+  {% for category,message in messages %}
+
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+        <strong>{{category}} :</strong> {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+{% endwith %}

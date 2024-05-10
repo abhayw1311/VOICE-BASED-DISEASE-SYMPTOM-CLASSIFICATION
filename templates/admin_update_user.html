@@ -1,0 +1,85 @@
+{% include 'admin_headerfile.html' %}
+{% include 'adm_navbar.html' %}
+
+<div class="container">
+    <center><h1 class="h3 mb-0 text-gray-800"> User Update </h1></center>
+    <br>
+</div>
+<style>
+    /* The alert message box */
+    .alert {
+        padding: 20px;
+        background-color: green; /* Red */
+        color: white;
+        margin-bottom: 15px;
+    }
+
+    /* The close button */
+    .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    /* When moving the mouse over the close button */
+    .closebtn:hover {
+        color: black;
+    }
+</style>
+<center>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <center>
+            <div class="alert">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        </center>
+    {% endif %}
+{% endwith %}
+</center>
+<center>
+    <div style="width:50%" class="custom-container" >
+        <br>
+        <form method="POST" action="" enctype="multipart/form-data">
+
+            <img src="{{ url_for('static', filename='upload_img/' + user_data.photo) }}" alt="User Profile Image" height="55px" width="55px" style="  border-radius: 50%;">
+
+
+            <div class="mb-3">
+                <label for="username" class="form-label">Full Name</label>
+                <input type="text" class="form-control form-control-sm" id="fullname" name="fullname" value="{{ user_data.name }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control form-control-sm" id="username" name="username" value="{{ user_data.username }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control form-control-sm" id="email" name="email" value="{{ user_data.email }}" required>
+            </div>
+            <div class="mb-3" >
+                <label for="file" class="form-label">Profile Picture</label>
+                <input type="file" class="form-control form-control-sm" id="file" name="file">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control form-control-sm" id="password" name="password" value="{{ user_data.password }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="mobile" class="form-label">Mobile</label>
+                <input type="text" class="form-control form-control-sm" id="mobile" name="mobile" value="{{ user_data.mobile }}" required>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Update</button>
+            </div>
+        </form>
+    </div>
+</center>

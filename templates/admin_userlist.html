@@ -1,0 +1,66 @@
+{% include 'admin_headerfile.html' %}
+
+{% include 'adm_navbar.html' %}
+
+<div class="container">
+    <center><h1 class="h3 mb-0 text-gray-800"> User List </h1></center>
+    <br>
+
+    <div style="overflow-x:auto;">
+        <table id="userTable" class="table table-hover">
+            <tr>
+                <th>User Number</th>
+                <th>Profile</th>
+                <th>User Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+            {% for n in profilelist %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>
+                    <img src="{{ url_for('static', filename='upload_img/' + n.photo) }}" alt="User Profile Image" height="55px" width="55px" style="border-radius: 50%;">
+                </td>
+                <td>{{n.username}}</td>
+                <td>{{n.email}}</td>
+                <td>{{n.mobile}}</td>
+                <td>
+                    <a href="{{ url_for('user_update_profile', id=n.id)}}" class="btn btn-dark btn-icon-text">view<i
+                                                        class="ti-file btn-icon-append"></i></a>
+                </td>
+                <td>
+                    <a href="{{ url_for('user_delete_profile', id=n.id)}}" class="btn btn-danger btn-icon-text">Delete<i
+                                                        class="ti-file btn-icon-append"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<!-- Add search button -->
+
+<script>
+    function searchProfiles() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("userTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2]; // Index 2 corresponds to the username column
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    // Add event listener to search button
+    document.querySelector("#searchButton").addEventListener("click", searchProfiles);
+</script>

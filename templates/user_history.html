@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/static/header_file.css">
+<link rel="stylesheet" type="text/css" href="/static/footer_file.css">
+<link rel="stylesheet" type="text/css" href="/static/main.css">
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+</head>
+    <body>
+    {% include "user_header.html" %}
+
+<div class="custom-container" >
+    <br>
+    <h2 class="text-center">History</h2>
+    <br>
+
+    <h5 class="text-center">Welcome {{username}}!!</h5>
+<style>
+    <style>
+    /* Style for table */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Style for table header */
+    th {
+        background-color: #f2f2f2;
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    /* Style for table data cells */
+    td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+    }
+
+    /* Style for alternate row colors */
+    tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+</style>
+</style>
+        <center>
+             <table>
+                <thead>
+                    <tr>
+                        <th>History Id</th>
+                        <th>Username</th>
+                        <th>Diseases</th>
+                        <th>Date Time</th>
+                        <th> Delete </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for n in history_records %}
+                    <tr>
+                        <td>{{ n[0] }}</td>
+                        <td>{{ username }}</td>
+                        <td>{{ n[2] }}</td>
+                        <td>{{ n[3] }}</td>
+                        <td>
+                            <a href="{{ url_for('user_delete_his', id=n[0])}}" class="btn btn-danger btn-icon-text">Delete<i
+                                                                class="ti-file btn-icon-append"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </center>
+<br><br><br>
+
+</div>
+    </body>
+    {% extends "footer.html" %}
+    {% block footer%}fixed{% endblock %}
+</html>

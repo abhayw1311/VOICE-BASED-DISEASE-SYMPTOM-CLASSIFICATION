@@ -1,0 +1,38 @@
+
+{% include 'admin_headerfile.html' %}
+
+{% include 'adm_navbar.html' %}
+
+    <div class="container">
+      <center><h1 class="h3 mb-0 text-gray-800"> Doctor List List </h1></center>
+        <br>
+
+<!--      <a href="#" class="btn btn-info  btn-lg" style="">+</a>-->
+        <div style="overflow-x:auto;">
+            <table class="table table-hover" >
+              <tr>
+                  <th>User Number</th>
+                  <th>Dr. Name</th>
+                  <th>Contact</th>
+                  <th>Specialist</th>
+                  <th>Address</th>
+
+              </tr>
+
+                {% for n in profilelist %}
+
+              <tr>
+                <td>{{loop.index}}</td>
+                <td>{{n.name}}</td>
+                <td>{{n.contact}}</td>
+                <td>{{n.specialist}}</td>
+                <td>{{n.address}}</td>
+              </tr>
+
+                {% endfor %}
+
+
+            </table>
+        </div>
+      </div>
+
