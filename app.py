@@ -292,6 +292,7 @@ def audio():
                 if word  not in stopwords.words('english'):
                     symptoms.append(word)
             flash("Symptoms recognized: " + ', '.join(symptoms))
+            
 
             # Detect disease based on symptoms
             CD = detect_disease(symptoms)
