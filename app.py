@@ -6,6 +6,8 @@ from flask import Flask, render_template,request,session,url_for,redirect,flash,
 from nltk.corpus import stopwords
 import nltk
 import pickle
+import google.generativeai as genai
+import os
 nltk.download('stopwords')
 
 app = Flask(__name__)
@@ -21,6 +23,11 @@ app.config['MYSQL_DB']='diseases_db'
 mysql = MySQL(app)
 
 #List of the symptoms is listed here in list l1.
+
+GOOGLE_API_KEY='AIzaSyDIjxkeTAO2W3oYunuUlf3cZShHMBGf1kc'
+
+genai.configure(api_key=GOOGLE_API_KEY)
+model = genai.GenerativeModel('gemini-1.0-pro')
 
 l1=['back_pain','constipation','abdominal_pain','diarrhoea','mild_fever','yellow_urine',
     'yellowing_of_eyes','acute_liver_failure','fluid_overload','swelling_of_stomach',
@@ -61,195 +68,37 @@ disease=['Fungal infection', 'Allergy', 'GERD', 'Chronic cholestasis',
 #disease = [df['prognosis'].unique()]
 #print(disease)
 
-with open('models/decision_tree.pkl','rb') as f:
-    decision_tree=pickle.load(f)
-
-
+with open('models/decision_tree.pkl','rb') as f1:
+    clf1=pickle.load(f1)
+with open('models/knn.pkl','rb') as f2:
+    clf2=pickle.load(f2)
+with open('models/Naive_Bayes.pkl','rb') as f3:
+    clf3=pickle.load(f3)
+with open('models/random_forest.pkl','rb') as f4:
+    clf4=pickle.load(f4)
 def detect_disease(symptoms):
     # Here you would implement the logic to detect diseases based on symptoms
     # For demonstration purposes, let's return a dummy list of diseases
     # This is a simplistic mapping and would typically be more complex in a real-world scenario
      #sample array of symptoms, take this as a input from the user but ensure that symptoms is present in the given dataset
-    print([decision_tree.predict(symptoms)[0]])
-    return [decision_tree.predict(symptoms)[0]]
-    disease_mapping = {
-        "cold": ["Flu"],
-        "cough": ["Flu"],
-        "vomiting": ["Typhoid"],
-
-        "high": ["Typhoid", "Malaria"],
-        "fever": ["Flu"],
-
-        "Lethargy": ["Typhoid"],
-        "Diarrhea": ["Typhoid", "Diarrhea"],
-        "nausea": ["Malaria", "Diarrhea", "Jaundice"],
-        "Hungry": ["Diabetes"],
-        "drymouth": ["Diabetes"],
-        "Blurred": ["Diabetes"],
-        "thirst": ["Diabetes"],
-        "Wheezing": ["Asthma"],
-        "Shortness": ["Asthma"],
-        "Cough": ["Asthma", "Allergy","Cold", "TB"],
-        #"Abdominal": ["Abdominal Pain"],
-        "Bloating": ["Abdominal Pain", "Weight Gain"],
-        "Stomach": ["Abdominal Pain"],
-        "ankle": ["Ankle Pain"],
-        "tingling": ["Ankle Pain"],
-        "instability": ["Ankle Pain"],
-        "stiffness": ["Ankle Pain"],
-        "Runny": ["Allergy", "Cold", "Watery Eye"],
-        "Watery Eye": ["Allergy", "Watery Eye", "Sneezing"],
-        "Eye": ["Allergy", "Watery Eye", "Sneezing"],
-        "Tunnel": ["Vision Loss"],
-        "Double": ["Vision Loss"],
-        "blur": ["Vision Loss"],
-        "seizures": ["Brain Tumor", "Encephalitis"],
-        "dizziness": ["Low Blood Pressure"],
-        "stool": ["Diarrhea"],
-        "belly": ["Diarrhea", "Abdominal Pain"],
-        "chills": ["Fever"],
-        "weakness": ["Fever"],
-        "shivring": ["Fever"],
-        "sweating": ["Fever"],
-        "appetite": ["Hepatitis C", "Weight Loss", "Jaundice"],
-        "eye": ["Watery Eye"],
-        "vision": ["Watery Eye"],
-        "Tremors": ["Tremors"],
-        "Seizure": ["Tremors", "Encephalitis"],
-        "snoring": ["Sleep Apnea"],
-        "gasping for breath": ["Sleep Apnea"],
-        "restlessness": ["Sleep Apnea"],
-        "burning itchy or watery eyes": ["Sneezing"],
-
-        "runny": ["Sneezing", "Cold", "Allergy"],
-        "nose": ["Sneezing", "Cold", "Allergy"],
-
-        "sore": ["Cold", "Allergy"],
-        "throat": ["Cold", "Allergy"],
-
-        "joint": ["Toe Pain", "Joint Pain"],
-        "infection": ["Common cold"],
-        "itching": ["Allergies"],
-        "fear": ["Anxity"],
-        "water eyes": ["Watery Eyes"],
-        "headache": ["Common cold", "Migrane", "Typhoid", "TB"],
-
-
-        "burning": ["Abdominal hernia"],
-        "chest": ["Abdominal hernia"],
-
-        "frequent": ["Abdominal pain", "Urinary Tract Infection"],
-        "urination": ["Abdominal pain", "Urinary Tract Infection"],
-
-        "bumps": ["Acne"],
-        "whiteheads": ["Acne"],
-        "blackheads": ["Acne"],
-        "fatigue": ["Allergies", "Anemia", "Weight Loss", "Malnutrition", "Jaundice"],
-        "sneezing": ["Allergies", "Cold", "Sneezing"],
-
-        "scatchy": ["Allergies"],
-        "throat": ["Allergies"],
-
-        "itchy": ["Allergies"],
-        "nose": ["Allergies"],
-
-        "facial": ["Allergies"],
-        "swelling": ["Allergies"],
-
-        "tired": ["Anemia"],
-
-        "trembling": ["Anxiety"],
-        "shaking": ["Anxiety"],
-
-        "sweating": ["Anxiety"],
-        "palms": ["Anxiety"],
-
-        "shortness": ["Anxiety", "Chest Pain"],
-        "breath": ["Anxiety", "Chest Pain"],
-
-        "sleep": ["Anxiety"],
-
-        "irritability": ["Anxiety"],
-        "irritable mood": ["Bipolar disorder"],
-        "racing thoughts": ["Bipolar disorder"],
-        "pressured speech": ["Bipolar disorder"],
-        #"decrease need for sleep": ["Bipolar disorder"],
-
-        "chest": ["Cough", "TB"],
-
-        "swollen lymph nodes": ["Dengue fever"],
-        #"swollen joints": ["Toe Pain"],
-        "teeth": ["Toothache"],
-        "bleeding gums": ["Toothache"],
-
-        "yellow": ["Hepatitis E", "Jaundice"],
-        "skin": ["Hepatitis E", "Jaundice"],
-
-        "weakness": ["Viral Infection"],
-
-        "fatigue": ["Swine Flu", "TB", "Allergies", "Weight Loss", "Malnutrition", "Jaundice"],
-
-        "nasal": ["Swine Flu"],
-        "secretions": ["Swine Flu"],
-
-        "loss ": ["Malnutrition"],
-        " fat": ["Malnutrition"],
-
-        "depression": ["Malnutrition"],
-        "skin sores": ["Leprosy"],
-        "lumps": ["Leprosy"],
-        #"strike the eyes and the thin tissue lining the inside of the nose": ["Leprosy"],
-        "Abdominal pain": ["Filariasis", "TB", "Jaundice"],
-        #"pain": ["Filariasis", "TB", "Jaundice"],
-        
-        "rashes": ["Allergies"],
-        
-        "arthritis": ["Filariasis"],
-        #"Hyper or hypo pigmented macules": ["Filariasis"],
-        "stiff neck": ["Encephalitis"],
-        "neck": ["Encephalitis"],
-        "redness": ["Allergies"],
-        "swelling": ["Joint Pain","Hair Fracture"],
-        "swollen": ["Joint Pain","Hair Fracture"],
-        "tenderness": ["Joint Pain"],
-        "warmth": ["Joint Pain"],
-        "locking of the joint": ["Joint Pain"],
-        "loss of range of motion of the joint": ["Joint Pain"],
-        "pressure, fullness or tightness in your chest": ["Chest Pain"],
-        "cold sweats": ["Anxiety"],
-
-        #"dizziness": ["Chest Pain"],
-
-        "hoarseness": ["Cough"],
-        "heartburn": ["Acidity"],
-        "coughing up blood or mucus": ["TB"],
-        "weight loss": ["TB", "Weight Loss", "Malnutrition"],
-        "chills": ["TB"],
-        "pale stools": ["Jaundice"],
-
-        "dark": ["Jaundice"],
-        "urine": ["Jaundice"],
-
-        "back":["Muscle Sprain"],
-        
-        "itchiness": ["Jaundice"],
-        "Fever": ["Viral Infection"],
-        "Diarrhea": ["Viral Infection"],
-        "Muscle ache": ["Viral Infection"],
-        "ache": ["Viral Infection"],
-        "Loss of sensation": ["Viral Infection"],
-        "scratchy": ["Throat Infection"],
-        "burning": ["Throat Infection"],
-        "raw": ["Throat Infection"],
-        "dry": ["Throat Infection"],
-        "irritated": ["Throat Infection"],
-    }
-
-    diseases = set()
-    for symptom in symptoms:
-        if symptom in disease_mapping:
-            diseases.update(disease_mapping[symptom])
-    return list(diseases)
+    l2=[]
+    for i in range(0,len(l1)):
+        l2.append(0)
+    for k in range(0,len(l1)):
+        for z in symptoms:
+            if(z==l1[k]):
+                l2[k]=1
+    inputtest = [l2]
+    frequency_dict={}
+    predictions = [disease[clf.predict(inputtest)[0]] for clf in [clf1, clf2, clf3, clf4]]
+    predictions_array = np.array(predictions)
+    for prediction in predictions:
+        if prediction in frequency_dict:
+            frequency_dict[prediction] += 1
+        else:
+            frequency_dict[prediction] = 1
+    frequent_predictions = [prediction for prediction, frequency in frequency_dict.items() if frequency > 2]    
+    return frequent_predictions
 
 def get_specialist(disease):
 
@@ -307,18 +156,6 @@ def get_specialist(disease):
 @app.route('/')
 def index():
     # flash("Welcome to web application")
-    l2=[]
-    for i in range(0,len(l1)):
-        l2.append(0)
-    psymptoms = ['obesity', 'swollen_legs','malaise',]
-    for k in range(0,len(l1)):
-        for z in psymptoms:
-            if(z==l1[k]):
-                l2[k]=1
-
-    #disease prediction
-    inputtest = [l2]
-    print(detect_disease(inputtest))
     return render_template('index.html')
 
 
@@ -352,10 +189,31 @@ def audio():
                 if word  not in stopwords.words('english'):
                     symptoms.append(word)
             flash("Symptoms recognized: " + ', '.join(symptoms))
+            prompt=f"""i want symptoms related to this symptoms spoken by the user "{symptoms}" from the below symptoms list:'back_pain','constipation','abdominal_pain','diarrhoea','mild_fever','yellow_urine',
+            'yellowing_of_eyes','acute_liver_failure','fluid_overload','swelling_of_stomach',
+            'swelled_lymph_nodes','malaise','blurred_and_distorted_vision','phlegm','throat_irritation',
+            'redness_of_eyes','sinus_pressure','runny_nose','congestion','chest_pain','weakness_in_limbs',
+            'fast_heart_rate','pain_during_bowel_movements','pain_in_anal_region','bloody_stool',
+            'irritation_in_anus','neck_pain','dizziness','cramps','bruising','obesity','swollen_legs',
+            'swollen_blood_vessels','puffy_face_and_eyes','enlarged_thyroid','brittle_nails',
+            'swollen_extremeties','excessive_hunger','extra_marital_contacts','drying_and_tingling_lips',
+            'slurred_speech','knee_pain','hip_joint_pain','muscle_weakness','stiff_neck','swelling_joints',
+            'movement_stiffness','spinning_movements','loss_of_balance','unsteadiness',
+            'weakness_of_one_body_side','loss_of_smell','bladder_discomfort','foul_smell_of urine',
+            'continuous_feel_of_urine','passage_of_gases','internal_itching','toxic_look_(typhos)',
+            'depression','irritability','muscle_pain','altered_sensorium','red_spots_over_body','belly_pain',
+            'abnormal_menstruation','dischromic _patches','watering_from_eyes','increased_appetite','polyuria','family_history','mucoid_sputum',
+            'rusty_sputum','lack_of_concentration','visual_disturbances','receiving_blood_transfusion',
+            'receiving_unsterile_injections','coma','stomach_bleeding','distention_of_abdomen',
+            'history_of_alcohol_consumption','fluid_overload','blood_in_sputum','prominent_veins_on_calf',
+            'palpitations','painful_walking','pus_filled_pimples','blackheads','scurring','skin_peeling',
+            'silver_like_dusting','small_dents_in_nails','inflammatory_nails','blister','red_sore_around_nose',
+            'yellow_crust_ooze'"""
+            response = model.generate_content(prompt)
 
-
+            symptoms_list = [s.strip().lstrip('- ') for s in response.text.split('\n')]
             # Detect disease based on symptoms
-            CD = detect_disease(symptoms)
+            CD = detect_disease(symptoms_list)
             diseases = list(set(CD))
             unique_specialists = set() 
             if diseases:
@@ -402,7 +260,6 @@ def audio():
                     flash(f"Error occurred while saving user's history: {str(e)}")
     return return_text
 
-
 @app.route('/user-login', methods=['GET', 'POST'])
 def user_login():
     error = None
@@ -416,14 +273,14 @@ def user_login():
         cur.execute("SELECT * FROM registration WHERE username = %s AND password = %s", (username, password))
         user = cur.fetchone()  # Fetch the first row
         cur.close()
-
+        print("hello")
         if user:
             session['username'] = username
             session['userid'] = user[0]
 
 
             user_dict = {'id':user[0],'username': user[0], 'photo': user[1]}
-
+            print("hello")
             cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cur.execute("SELECT username, photo FROM registration WHERE username=%s", (username,))
             ulist = cur.fetchall()
@@ -470,7 +327,7 @@ def usersignup():
                 cur.close()
 
                 file.save('static/upload_img/' + file.filename)
-
+                
                 flash("Signup successful!!")  # You can redirect to another page or show a success message.
 
     return render_template('user_signup.html')
@@ -482,6 +339,7 @@ def user_dashboard():
         return redirect(url_for('user_login'))  # Assuming you have a login route
 
     username = session['username']
+    print("hello")
     return render_template('user_start.html', username=username)
 
 @app.route('/history_list')
@@ -727,6 +585,46 @@ def diseases_list():
         # Handle any exceptions that might occur during database access
         flash(f"Error occurred while fetching doctor list: {str(e)}")
         return render_template('error.html', error_message=str(e))
+
+
+
+
+@app.route('/user_send_msg', methods=['GET', 'POST'])
+def user_send_msg():
+
+    u_id = session['userid']
+    d_id = request.args.get('did')
+    print("Uid : "+str(u_id)+" Did : "+str(d_id))
+    if request.method == "POST":
+        userid = u_id
+        doctorid = d_id
+        msg = request.form['msg']
+        print("Again Uid : " + str(u_id) + " Again Did : " + str(d_id))
+        if not userid or not doctorid or not msg:
+            flash("Please fill in all required fields.")
+        else:
+                cur = mysql.connection.cursor()
+                cur.execute(
+                    "INSERT INTO doc_msg (user_id, doc_id, msg) VALUES (%s, %s, %s)",
+                    (userid, d_id, msg))
+                mysql.connection.commit()
+                cur.close()
+
+                flash("Symptoms Send successful!!")  # You can redirect to another page or show a success message.
+    return render_template('user_send_msg.html')
+
+
+@app.route('/admin-view-msg')
+def adminviewmsg():
+    try:
+        cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cur.execute("SELECT dm.msg,dm.datetime, u.name AS user_name, d.name AS doctor_name FROM doc_msg dm LEFT JOIN registration u ON dm.user_id = u.id LEFT JOIN doctor d ON dm.doc_id = d.did ")
+        profilelist = cur.fetchall()
+        cur.close()
+
+        return render_template('admin_msg_view.html', profilelist=profilelist, )
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 
 

@@ -25,6 +25,7 @@
 
     <h5 class="text-center"> Welcome {{username}}!!</h5>
 <style>
+    <style>
     /* Style for table */
     table {
         width: 100%;
@@ -52,6 +53,7 @@
         background-color: #f2f2f2;
     }
 </style>
+</style>
         <center>
             <table>
                 <thead>
@@ -61,6 +63,7 @@
                         <th>Mobile</th>
                         <th>Address</th>
                         <th>Type</th>
+                        <th>Consult </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,6 +74,9 @@
                         <td>{{ n.contact }}</td>
                         <td>{{ n.address }}</td>
                         <td>{{ n.type }}</td>
+                        <td> <a href="{{ url_for('user_send_msg', did=n.did) }}" class="btn btn-danger">
+							<i class="fas fa-edit"></i>
+						</a>  </td>
                     </tr>
                     {% endfor %}
                 </tbody>

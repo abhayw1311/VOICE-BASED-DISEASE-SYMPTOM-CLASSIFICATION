@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/static/header_file.css">
+<link rel="stylesheet" type="text/css" href="/static/footer_file.css">
+<link rel="stylesheet" type="text/css" href="/static/main.css">
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+</head>
+    <body>
+    {% include "user_header.html" %}
+
+<div class="custom-container" >
+    <br>
+    <h2 class="text-center">Symptoms Write</h2>
+    <br>
+
+<style>
+    <style>
+    /* Style for table */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Style for table header */
+    th {
+        background-color: #f2f2f2;
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    /* Style for table data cells */
+    td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+    }
+
+    /* Style for alternate row colors */
+    tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+</style>
+    <style>
+        /* Add any custom styles here */
+        .custom-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</style>
+        <center>
+                <div class="custom-container">
+                    <h2 class="text-center">Symptoms Write</h2>
+                    <form method="POST">
+                        <div class="form-group">
+                            <label for="msg">Message:</label>
+                            <textarea class="form-control" id="msg" name="msg" rows="5"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Send</button>
+                    </form>
+                </div>
+        </center>
+<br><br><br>
+
+</div>
+    </body>
+    {% extends "footer.html" %}
+    {% block footer%}fixed{% endblock %}
+</html>
