@@ -24,7 +24,7 @@ mysql = MySQL(app)
 
 #List of the symptoms is listed here in list l1.
 
-GOOGLE_API_KEY='AIzaSyDIjxkeTAO2W3oYunuUlf3cZShHMBGf1kc'
+GOOGLE_API_KEY=os.getenv('SECRET_KEY')
 
 genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel('gemini-1.0-pro')
